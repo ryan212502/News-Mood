@@ -1,3 +1,7 @@
+﻿1. CBS had the most positive news according to the Vader Sentiment Analyzer.
+2. CNN and the NY Times were virtually tied for having the most negative twitter according Vader Sentiment Analyzer.
+3. BBC had the most neutral twitter according to the Vader Sentiment Analyzer.
+
 
 
 ```python
