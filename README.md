@@ -1,6 +1,7 @@
 ﻿1. CBS had the most positive news according to the Vader Sentiment Analyzer.
-2. CNN and the NY Times were virtually tied for having the most negative twitter according Vader Sentiment Analyzer.
+2. CNN had the most negative twitter according Vader Sentiment Analyzer.
 3. BBC had the most neutral twitter according to the Vader Sentiment Analyzer.
+
 
 
 
@@ -10,6 +11,7 @@ import tweepy
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import datetime
 
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 analyzer = SentimentIntensityAnalyzer()
@@ -33,7 +35,7 @@ oldest_tweet = None
 
 for user in twitter_user:
     public_tweets = api.user_timeline(user, count=100)
-    tweetnumber = 1       
+    tweet_count = 1       
     for tweet in public_tweets:
         results = analyzer.polarity_scores(tweet["text"])
         compound = results["compound"]
@@ -49,12 +51,12 @@ for user in twitter_user:
                            "Positive": pos,
                            "Neutral": neu,
                            "Negative": neg,
-                           "Tweet Count": tweetnumber})
+                           "Tweet Count": tweet_count})
         
         if "Username" == "Username":
-            tweetnumber +=1
+            tweet_count +=1
         else:
-            tweetnumber = 1  
+            tweet_count = 1  
 ```
 
 
@@ -62,6 +64,7 @@ for user in twitter_user:
 sentiments_df=pd.DataFrame.from_dict(sentiments)
 sentiments_df = sentiments_df[["Username", "Tweet Count", "Date", "Compound", "Negative", "Neutral", "Positive", "Text"]]
 sentiments_df["Username"] = sentiments_df["Username"].str.replace('@','')
+sentiments_df.to_csv('News Mood Data.csv', index=False)
 ```
 
 
@@ -105,56 +108,56 @@ sentiments_df.head()
       <th>0</th>
       <td>BBC</td>
       <td>1</td>
-      <td>Sun Apr 22 20:17:08 +0000 2018</td>
-      <td>0.6124</td>
-      <td>0.000</td>
-      <td>0.773</td>
-      <td>0.227</td>
-      <td>Stand up comedy from halloumi enthusiast and a...</td>
+      <td>Mon Apr 23 19:15:23 +0000 2018</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>RT @BBCTwo: It's #ShakespearesBirthday so here...</td>
     </tr>
     <tr>
       <th>1</th>
       <td>BBC</td>
       <td>2</td>
-      <td>Sun Apr 22 19:03:04 +0000 2018</td>
-      <td>-0.5267</td>
-      <td>0.159</td>
-      <td>0.841</td>
-      <td>0.000</td>
-      <td>The lives of two half-sisters and their drawin...</td>
+      <td>Mon Apr 23 18:53:11 +0000 2018</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>👶💖 The Duke and Duchess of Cambridge introduce...</td>
     </tr>
     <tr>
       <th>2</th>
       <td>BBC</td>
       <td>3</td>
-      <td>Sun Apr 22 18:00:24 +0000 2018</td>
-      <td>0.0000</td>
-      <td>0.000</td>
-      <td>1.000</td>
-      <td>0.000</td>
-      <td>😍🐮 These cows have been let out for the first ...</td>
+      <td>Mon Apr 23 18:01:04 +0000 2018</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>✈️ Do you know how to wear an oxygen mask?  ht...</td>
     </tr>
     <tr>
       <th>3</th>
       <td>BBC</td>
       <td>4</td>
-      <td>Sun Apr 22 16:00:22 +0000 2018</td>
-      <td>0.0000</td>
-      <td>0.000</td>
-      <td>1.000</td>
-      <td>0.000</td>
-      <td>❤️🦍 Bolingo is learning to enhance his mental ...</td>
+      <td>Mon Apr 23 16:58:47 +0000 2018</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>RT @BBCBreaking: The Duke and Duchess of Cambr...</td>
     </tr>
     <tr>
       <th>4</th>
       <td>BBC</td>
       <td>5</td>
-      <td>Sun Apr 22 15:31:08 +0000 2018</td>
-      <td>0.0000</td>
-      <td>0.000</td>
-      <td>1.000</td>
-      <td>0.000</td>
-      <td>It's a boy! 😍The gender of the UK's first pola...</td>
+      <td>Mon Apr 23 16:23:06 +0000 2018</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>❤️ The Duke of Cambridge has arrived at hospit...</td>
     </tr>
   </tbody>
 </table>
@@ -191,7 +194,7 @@ nytimes_df = plt.scatter(tweet_nytimes, compound_nytimes, s = 100,color="yellow"
 
 plt.xlabel("Tweets Ago")
 plt.ylabel("Tweet Polarity")
-plt.title(f"Sentiment Analysis of Media Tweets (04/22/2018)")
+plt.title(f"Sentiment Analysis of Media Tweets " + (str(datetime.date.today())))
 lgnd = plt.legend(bbox_to_anchor = (1,1), title = 'Twitter User') 
 plt.grid()
 plt.show
@@ -224,7 +227,7 @@ y = sentiments_groupby
 for i, v in enumerate(y):
     plt.text(i+.02, v+.015, str(v).format(), color='black', fontweight = 'bold')
 
-plt.title("Overall Media Sentiment Based on Twitter")
+plt.title("Overall Media Sentiment Based on Twitter " + (str(datetime.date.today())))
 
 plt.ylabel("Tweet Polarity")
 
